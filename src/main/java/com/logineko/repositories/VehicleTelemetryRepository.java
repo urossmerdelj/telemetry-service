@@ -1,11 +1,12 @@
 package com.logineko.repositories;
 
-import com.logineko.entities.VehicleTelemetry;
-import io.quarkus.hibernate.orm.panache.PanacheRepositoryBase;
-import jakarta.enterprise.context.ApplicationScoped;
-
 import java.util.UUID;
 
+import jakarta.enterprise.context.ApplicationScoped;
+
+import com.logineko.entities.VehicleTelemetry;
+
+import io.quarkus.hibernate.orm.panache.PanacheRepositoryBase;
+
 @ApplicationScoped
-public class VehicleTelemetryRepository implements PanacheRepositoryBase<VehicleTelemetry, UUID> {
-}
+public class VehicleTelemetryRepository implements PanacheRepositoryBase<VehicleTelemetry, UUID> {}
