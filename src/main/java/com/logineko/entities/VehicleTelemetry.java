@@ -63,7 +63,7 @@ public abstract class VehicleTelemetry extends PanacheEntityBase {
      * A flag indicating that this record had one or more fields that could not be parsed from the
      * original source data. This allows for easy querying of failed imports.
      */
-    @Column(name = "import_failed", nullable = false)
+    @Column(nullable = false)
     private boolean importFailed = false;
 
     /**
@@ -72,6 +72,6 @@ public abstract class VehicleTelemetry extends PanacheEntityBase {
      * error-specific columns. Stored as JSONB in the database for efficient querying.
      */
     @JdbcTypeCode(SqlTypes.JSON)
-    @Column(name = "raw_csv_data", columnDefinition = "jsonb")
+    @Column(columnDefinition = "jsonb")
     private Map<String, String> rawCsvData;
 }
