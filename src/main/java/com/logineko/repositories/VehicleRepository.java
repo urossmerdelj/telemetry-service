@@ -30,7 +30,7 @@ public class VehicleRepository implements PanacheRepositoryBase<Vehicle, UUID> {
       query = findAll();
     }
 
-    List<Vehicle> list = query.page(params.getPage(), params.getSize()).list();
+    List<Vehicle> list = query.page(params.getPageIndex(), params.getSize()).list();
 
     return new PaginatedResult<>(list, query.count());
   }

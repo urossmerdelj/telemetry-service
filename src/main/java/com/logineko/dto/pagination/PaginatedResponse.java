@@ -16,6 +16,6 @@ public class PaginatedResponse<T> {
 
   public PaginatedResponse(PaginationQueryParam query, PaginatedResult<T> paginatedResult) {
     this.data = paginatedResult.data();
-    this.meta = new PaginationMeta(query.getSize(), query.getPage(), paginatedResult.total());
+    this.meta = new PaginationMeta(query.getPage(), query.getSize(), paginatedResult.total());
   }
 }
