@@ -3,7 +3,6 @@ package com.logineko.mappers;
 import com.logineko.dto.vehicle.CreateVehicleRequestDto;
 import com.logineko.dto.vehicle.VehicleDto;
 import com.logineko.entities.Vehicle;
-
 import org.mapstruct.Mapper;
 import org.mapstruct.Mapping;
 import org.mapstruct.MappingConstants;

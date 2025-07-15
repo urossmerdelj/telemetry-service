@@ -81,7 +81,6 @@
             <groupId>com.fasterxml.jackson.dataformat</groupId>
             <artifactId>jackson-dataformat-csv</artifactId>
         </dependency>
-
         <dependency>
             <groupId>io.quarkus</groupId>
             <artifactId>quarkus-junit5</artifactId>
@@ -103,13 +102,9 @@
                 <configuration>
                     <java>
                         <googleJavaFormat>
-                            <version>1.17.0</version>
+                            <version>1.28.0</version>
                             <style>GOOGLE</style>
                         </googleJavaFormat>
-                        <removeUnusedImports/>
-                        <importOrder>
-                            <order>java,jakarta,com.logineko,</order>
-                        </importOrder>
                     </java>
                 </configuration>
                 <executions>

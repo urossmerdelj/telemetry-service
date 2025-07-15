@@ -1,12 +1,9 @@
 package com.logineko.entities;
 
-import java.util.UUID;
-
-import jakarta.persistence.*;
-
 import com.logineko.entities.enums.VehicleType;
-
 import io.quarkus.hibernate.orm.panache.PanacheEntityBase;
+import jakarta.persistence.*;
+import java.util.UUID;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
@@ -17,7 +14,9 @@ import lombok.Setter;
 @NoArgsConstructor
 public class Vehicle extends PanacheEntityBase {
 
-  @Id @GeneratedValue public UUID id;
+  @Id
+  @GeneratedValue(strategy = GenerationType.UUID)
+  private UUID id;
 
   @Column(unique = true, nullable = false)
   private String serialNumber;

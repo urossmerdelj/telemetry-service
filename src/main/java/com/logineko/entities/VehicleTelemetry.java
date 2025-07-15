@@ -1,12 +1,10 @@
 package com.logineko.entities;
 
+import io.quarkus.hibernate.orm.panache.PanacheEntityBase;
+import jakarta.persistence.*;
 import java.time.LocalDateTime;
 import java.util.Map;
 import java.util.UUID;
-
-import jakarta.persistence.*;
-
-import io.quarkus.hibernate.orm.panache.PanacheEntityBase;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
@@ -21,9 +19,17 @@ import org.hibernate.type.SqlTypes;
 @NoArgsConstructor
 @Inheritance(strategy = InheritanceType.SINGLE_TABLE)
 @DiscriminatorColumn(name = "vehicle_type")
+@Table(
+    uniqueConstraints = {
+      @UniqueConstraint(
+          name = "uk_vehicle_telemetry_vehicle_datetime",
+          columnNames = {"vehicle_id", "date_time"})
+    })
 public abstract class VehicleTelemetry extends PanacheEntityBase {
 
-  @Id @GeneratedValue public UUID id;
+  @Id
+  @GeneratedValue(strategy = GenerationType.UUID)
+  private UUID id;
 
   @ManyToOne(fetch = FetchType.LAZY)
   @JoinColumn(name = "vehicle_id", nullable = false)

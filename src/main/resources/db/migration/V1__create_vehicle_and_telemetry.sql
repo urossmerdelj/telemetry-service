@@ -1,3 +1,6 @@
+-- Enable UUID extension
+CREATE EXTENSION IF NOT EXISTS "uuid-ossp";
+
 -- Enable PostGIS extension
 CREATE EXTENSION IF NOT EXISTS postgis;
 
@@ -8,13 +11,13 @@ CREATE TABLE vehicle
     vehicle_type  VARCHAR(255) NOT NULL
 );
 
--- Create the single table for all vehicle telemetry
+-- create the single table for all vehicle telemetry
 CREATE TABLE vehicle_telemetry
 (
-    -- Discriminator Column
+    -- discriminator Column
     vehicle_type                        VARCHAR(31)                 NOT NULL,
 
-    -- Common VehicleTelemetry
+    -- common VehicleTelemetry
     id                                  UUID PRIMARY KEY,
     vehicle_id                          UUID                        NOT NULL,
     date_time                           TIMESTAMP WITHOUT TIME ZONE NOT NULL,
@@ -57,8 +60,8 @@ CREATE TABLE vehicle_telemetry
     concave_position                    INTEGER,
     upper_sieve_position                INTEGER,
     lower_sieve_position                INTEGER,
-    grain_tank_70                       BOOLEAN,
-    grain_tank_100                      BOOLEAN,
+    grain_tank_70                       VARCHAR(255),
+    grain_tank_100                      VARCHAR(255),
     grain_moisture_content              DOUBLE PRECISION,
     throughput                          DOUBLE PRECISION,
     radial_spreader_speed               INTEGER,
@@ -81,9 +84,17 @@ CREATE TABLE vehicle_telemetry
     CONSTRAINT fk_vehicle
         FOREIGN KEY (vehicle_id)
             REFERENCES vehicle (id)
+            ON DELETE CASCADE
+            ON UPDATE CASCADE,
+
+    -- prevent duplicate telemetry
+    CONSTRAINT uk_vehicle_telemetry_vehicle_datetime
+        UNIQUE (vehicle_id, date_time)
+
 );
 
 -- indexes
+CREATE INDEX idx_vehicle_type ON vehicle (vehicle_type);
 CREATE INDEX idx_vehicle_telemetry_vehicle_id ON vehicle_telemetry (vehicle_id);
 CREATE INDEX idx_vehicle_telemetry_date_time ON vehicle_telemetry (date_time);
 CREATE INDEX idx_vehicle_telemetry_location ON vehicle_telemetry USING GIST (location);

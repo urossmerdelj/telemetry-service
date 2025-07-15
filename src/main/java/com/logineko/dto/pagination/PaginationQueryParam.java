@@ -1,10 +1,9 @@
 package com.logineko.dto.pagination;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.validation.constraints.Max;
 import jakarta.validation.constraints.Min;
 import jakarta.ws.rs.DefaultValue;
-
-import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.EqualsAndHashCode;
 import lombok.Getter;
 import lombok.experimental.NonFinal;
@@ -14,45 +13,30 @@ import org.jboss.resteasy.reactive.RestQuery;
 @NonFinal
 @EqualsAndHashCode
 public class PaginationQueryParam {
-  private static final int MAX_PER_PAGE = 100;
-  private static final int MIN_PER_PAGE = 1;
-  private static final int DEFAULT_PER_PAGE = 20;
-
   private static final int MIN_PAGE = 1;
-  private static final int DEFAULT_PAGE = 1;
-
-  @DefaultValue("20")
-  @RestQuery
-  @Min(1)
-  @Max(100)
-  protected int perPage;
+  private static final int MIN_SIZE = 1;
+  private static final int MAX_SIZE = 100;
+  private static final int DEFAULT_SIZE = 20;
 
   @DefaultValue("1")
   @RestQuery
-  @Min(1)
+  @Min(MIN_PAGE)
   protected int page;
 
+  @DefaultValue("20")
+  @RestQuery
+  @Min(MIN_SIZE)
+  @Max(MAX_SIZE)
+  protected int size;
+
   public PaginationQueryParam() {
-    this.perPage = DEFAULT_PER_PAGE;
-    this.page = DEFAULT_PAGE;
+    this.page = MIN_PAGE;
+    this.size = DEFAULT_SIZE;
   }
 
-  public PaginationQueryParam(int perPage, int page) {
-    this.perPage = Math.min(Math.max(perPage, MIN_PER_PAGE), MAX_PER_PAGE);
+  public PaginationQueryParam(int size, int page) {
+    this.size = Math.min(Math.max(size, MIN_SIZE), MAX_SIZE);
     this.page = Math.max(page, MIN_PAGE);
-  }
-
-  public void setPerPage(int perPage) {
-    this.perPage = Math.min(Math.max(perPage, MIN_PER_PAGE), MAX_PER_PAGE);
-  }
-
-  public void setPage(int page) {
-    this.page = Math.max(page, MIN_PAGE);
-  }
-
-  @JsonIgnore
-  public int getOffset() {
-    return this.getPageIndex() * this.getPerPage();
   }
 
   @JsonIgnore

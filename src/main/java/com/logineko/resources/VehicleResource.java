@@ -1,16 +1,14 @@
 package com.logineko.resources;
 
-import java.util.UUID;
-
+import com.logineko.dto.pagination.PaginatedResponse;
+import com.logineko.dto.vehicle.CreateVehicleRequestDto;
+import com.logineko.dto.vehicle.VehicleDto;
+import com.logineko.dto.vehicle.VehicleQueryParamDto;
+import com.logineko.services.VehicleService;
 import jakarta.inject.Inject;
 import jakarta.validation.Valid;
 import jakarta.ws.rs.*;
-
-import com.logineko.dto.pagination.PaginatedResponse;
-import com.logineko.dto.pagination.PaginationQueryParam;
-import com.logineko.dto.vehicle.CreateVehicleRequestDto;
-import com.logineko.dto.vehicle.VehicleDto;
-import com.logineko.services.VehicleService;
+import java.util.UUID;
 
 @Path("/vehicles")
 public class VehicleResource {
@@ -29,7 +27,7 @@ public class VehicleResource {
   }
 
   @GET
-  public PaginatedResponse<VehicleDto> getVehicles(@BeanParam @Valid PaginationQueryParam params) {
+  public PaginatedResponse<VehicleDto> getVehicles(@BeanParam @Valid VehicleQueryParamDto params) {
     return vehicleService.getVehicles(params);
   }
 }

@@ -1,10 +1,8 @@
 package com.logineko.entities;
 
-import jakarta.persistence.*;
-
 import com.logineko.entities.enums.CropType;
 import com.logineko.entities.enums.EnabledStatus;
-
+import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
@@ -73,10 +71,12 @@ public class CombineTelemetry extends VehicleTelemetry {
   private Integer lowerSievePosition;
 
   @Column(name = "grain_tank_70")
-  private Boolean grainTankFillLevel70Reached;
+  @Enumerated(EnumType.STRING)
+  private EnabledStatus grainTankFillLevel70Reached;
 
   @Column(name = "grain_tank_100")
-  private Boolean grainTankFillLevel100Reached;
+  @Enumerated(EnumType.STRING)
+  private EnabledStatus grainTankFillLevel100Reached;
 
   /** The moisture content of the harvested grain. Unit: percent (%). */
   private Double grainMoistureContent;

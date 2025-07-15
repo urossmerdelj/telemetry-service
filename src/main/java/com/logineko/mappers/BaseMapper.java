@@ -1,10 +1,9 @@
 package com.logineko.mappers;
 
-import java.util.List;
-
 import com.logineko.dto.pagination.PaginatedResponse;
 import com.logineko.dto.pagination.PaginationQueryParam;
 import com.logineko.repositories.dto.PaginatedResult;
+import java.util.List;
 
 /**
  * A generic base mapper interface that provides common mapping functionalities.
