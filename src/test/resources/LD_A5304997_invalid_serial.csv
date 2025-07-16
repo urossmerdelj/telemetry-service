@@ -1,0 +1,4 @@
+﻿Date/Time;Serial number;GPS longitude [°];GPS latitude [°];Total working hours counter [h];Engine speed [rpm];Engine load [%];Fuel consumption [l/h];Ground speed gearbox [km/h];Ground speed radar [km/h];Coolant temperature [°C];Speed front PTO [rpm];Speed rear PTO [rpm];current gear shift [];Ambient temperature [°C];Parking brake status [];Transverse differential lock status [];All-wheel drive status [];Actual status of creeper []
+Mar 31, 2023, 5:54:27 AM;A5304997;20.4154522;45.3649405;1185.36;748;39;2.85;0;NA;14;0;0;5;10.59;3;0;Active;Inactive
+Mar 31, 2023, 5:54:37 AM;A5305041;20.4154501;45.3649287;1185.37;752;40;2.85;0;NA;15;0;0;5;10.59;3;0;Active;Inactive
+Mar 31, 2023, 5:54:47 AM;A5304997;20.4154438;45.3649366;1185.37;753;40;2.75;0;NA;16;0;0;5;10.59;3;0;Active;Inactive
