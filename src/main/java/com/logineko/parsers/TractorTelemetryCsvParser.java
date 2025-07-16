@@ -20,7 +20,7 @@ public class TractorTelemetryCsvParser extends TelemetryCsvParserBase {
     parseCommonFields(telemetry, row, vehicle);
     telemetry.setGroundSpeed(parseDouble(row.get("Ground speed gearbox [km/h]")));
 
-    // Tractor-specific fields
+    // tractor-specific fields
     telemetry.setFuelConsumption(parseDouble(row.get("Fuel consumption [l/h]")));
     telemetry.setGroundSpeedRadar(parseDouble(row.get("Ground speed radar [km/h]")));
     telemetry.setCoolantTemperature(parseDouble(row.get("Coolant temperature [°C]")));

@@ -1,4 +1,6 @@
 package com.logineko.dto.telemetry;
 
+import com.logineko.dto.vehicle.VehicleDto;
+
 public record TelemetryImportResultDto(
-    long totalRows, long successfulImports, long failedImports) {}
+    VehicleDto vehicle, int totalRows, int successfulImports, int failedImports, long durationMs) {}

@@ -30,4 +30,10 @@ public class VehicleResource {
   public PaginatedResponse<VehicleDto> getVehicles(@BeanParam @Valid VehicleQueryParamDto params) {
     return vehicleService.getVehicles(params);
   }
+
+  @DELETE
+  @Path("/{id}")
+  public void deleteVehicle(@PathParam("id") UUID id) {
+    vehicleService.deleteVehicleById(id);
+  }
 }

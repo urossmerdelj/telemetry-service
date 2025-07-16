@@ -1,13 +1,12 @@
 package com.logineko.parsers;
 
+import static com.logineko.utils.DateTimeUtils.EXTERNAL_SOURCE_DATE_FORMATTER;
+
 import com.logineko.entities.Vehicle;
 import com.logineko.entities.VehicleTelemetry;
 import com.logineko.resources.exceptions.TelemetryCsvParsingException;
 import java.time.LocalDateTime;
-import java.time.format.DateTimeFormatter;
-import java.time.format.DateTimeFormatterBuilder;
 import java.time.format.DateTimeParseException;
-import java.util.Locale;
 import java.util.Map;
 import java.util.function.Function;
 import org.geolatte.geom.G2D;
@@ -17,12 +16,6 @@ import org.geolatte.geom.crs.CoordinateReferenceSystems;
 
 public abstract class TelemetryCsvParserBase implements TelemetryCsvParser {
 
-  private static final DateTimeFormatter DATE_TIME_FORMATTER =
-      new DateTimeFormatterBuilder()
-          .parseCaseInsensitive()
-          .appendPattern("MMM d, yyyy, h:mm:ss a")
-          .toFormatter(Locale.ENGLISH);
-
   @Override
   public abstract VehicleTelemetry parseRow(Map<String, String> row, Vehicle vehicle);
 
@@ -30,6 +23,8 @@ public abstract class TelemetryCsvParserBase implements TelemetryCsvParser {
       VehicleTelemetry telemetry, Map<String, String> row, Vehicle vehicle) {
     telemetry.setVehicle(vehicle);
     telemetry.setDateTime(parseDateTime(row.get("Date/Time")));
+    telemetry.setLongitude(parseDouble(row.get("GPS longitude [°]")));
+    telemetry.setLatitude(parseDouble(row.get("GPS latitude [°]")));
     telemetry.setLocation(parseLocation(row.get("GPS longitude [°]"), row.get("GPS latitude [°]")));
     telemetry.setTotalWorkingHours(parseDouble(row.get("Total working hours counter [h]")));
     telemetry.setEngineSpeed(parseInteger(row.get("Engine speed [rpm]")));
@@ -46,7 +41,7 @@ public abstract class TelemetryCsvParserBase implements TelemetryCsvParser {
     }
 
     try {
-      return LocalDateTime.parse(value, DATE_TIME_FORMATTER);
+      return LocalDateTime.parse(value, EXTERNAL_SOURCE_DATE_FORMATTER);
     } catch (DateTimeParseException e) {
       throw new TelemetryCsvParsingException("Date/Time", value, e);
     }

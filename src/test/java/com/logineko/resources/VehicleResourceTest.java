@@ -45,7 +45,7 @@ class VehicleResourceTest {
 
   @Test
   void testCreateVehicle_success() {
-    CreateVehicleRequestDto request = new CreateVehicleRequestDto("SN-123", VehicleType.TRACTOR);
+    CreateVehicleRequestDto request = new CreateVehicleRequestDto("123", VehicleType.TRACTOR);
 
     given()
         .contentType(ContentType.JSON)
@@ -55,19 +55,18 @@ class VehicleResourceTest {
         .then()
         .statusCode(200)
         .body("id", notNullValue())
-        .body("serialNumber", equalTo("SN-123"))
+        .body("serialNumber", equalTo("123"))
         .body("vehicleType", equalTo("TRACTOR"));
   }
 
   @Test
   void testCreateVehicle_conflict() {
     Vehicle vehicle = new Vehicle();
-    vehicle.setSerialNumber("SN-CONFLICT");
+    vehicle.setSerialNumber("CONFLICT");
     vehicle.setVehicleType(VehicleType.COMBINE);
     setUpVehicle(vehicle);
 
-    CreateVehicleRequestDto request =
-        new CreateVehicleRequestDto("SN-CONFLICT", VehicleType.TRACTOR);
+    CreateVehicleRequestDto request = new CreateVehicleRequestDto("CONFLICT", VehicleType.TRACTOR);
 
     given()
         .contentType(ContentType.JSON)
@@ -94,7 +93,7 @@ class VehicleResourceTest {
   @Test
   void testGetVehicleById_success() {
     Vehicle vehicle = new Vehicle();
-    vehicle.setSerialNumber("SN-FETCH");
+    vehicle.setSerialNumber("SN");
     vehicle.setVehicleType(VehicleType.TRACTOR);
     setUpVehicle(vehicle);
 
@@ -104,7 +103,7 @@ class VehicleResourceTest {
         .then()
         .statusCode(200)
         .body("id", equalTo(vehicle.getId().toString()))
-        .body("serialNumber", equalTo("SN-FETCH"));
+        .body("serialNumber", equalTo("SN"));
   }
 
   @Test
@@ -138,7 +137,7 @@ class VehicleResourceTest {
   void testGetVehicles_withPagination() {
     for (int i = 0; i < 5; i++) {
       Vehicle vehicle = new Vehicle();
-      vehicle.setSerialNumber("SN-PAGED-" + i);
+      vehicle.setSerialNumber("SN-" + i);
       vehicle.setVehicleType(VehicleType.TRACTOR);
       setUpVehicle(vehicle);
     }
@@ -154,5 +153,23 @@ class VehicleResourceTest {
         .body("meta.size", equalTo(2))
         .body("meta.total", equalTo(5))
         .body("data", hasSize(2));
+  }
+
+  @Test
+  void testDeleteVehicle_success() {
+    Vehicle vehicle = new Vehicle();
+    vehicle.setSerialNumber("DELETE");
+    vehicle.setVehicleType(VehicleType.TRACTOR);
+    setUpVehicle(vehicle);
+
+    given().when().delete("/vehicles/" + vehicle.getId()).then().statusCode(204);
+    given().when().get("/vehicles/" + vehicle.getId()).then().statusCode(404);
+  }
+
+  @Test
+  void testDeleteVehicle_nonExistingVehicle_shouldReturn204() {
+    UUID randomId = UUID.randomUUID();
+
+    given().when().delete("/vehicles/" + randomId).then().statusCode(204);
   }
 }

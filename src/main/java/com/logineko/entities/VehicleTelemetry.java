@@ -1,5 +1,6 @@
 package com.logineko.entities;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import io.quarkus.hibernate.orm.panache.PanacheEntityBase;
 import jakarta.persistence.*;
 import java.time.LocalDateTime;
@@ -38,8 +39,15 @@ public abstract class VehicleTelemetry extends PanacheEntityBase {
   @Column(nullable = false)
   private LocalDateTime dateTime;
 
+  @Column(nullable = false)
+  private Double longitude;
+
+  @Column(nullable = false)
+  private Double latitude;
+
   /** The geographic location of the vehicle, stored as a Point with SRID 4326 (WGS 84). */
-  @Column(columnDefinition = "geometry(Point,4326)")
+  @Column(nullable = false, columnDefinition = "geometry(Point,4326)")
+  @JsonIgnore
   private Point<G2D> location;
 
   /** The cumulative total working hours of the vehicle's engine. Unit: hours (h). */

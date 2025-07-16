@@ -21,6 +21,8 @@ CREATE TABLE vehicle_telemetry
     id                                  UUID PRIMARY KEY,
     vehicle_id                          UUID                        NOT NULL,
     date_time                           TIMESTAMP WITHOUT TIME ZONE NOT NULL,
+    longitude                           DOUBLE PRECISION            NOT NULL,
+    latitude                            DOUBLE PRECISION            NOT NULL,
     location                            GEOMETRY(Point, 4326),
     total_working_hours                 DOUBLE PRECISION,
     engine_speed                        INTEGER,

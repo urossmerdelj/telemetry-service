@@ -46,11 +46,19 @@ public class VehicleService {
   public Vehicle getVehicleBySerialNumberOrThrow(String serialNumber) {
     return vehicleRepository
         .findBySerialNumber(serialNumber)
-        .orElseThrow(() -> new NotFoundException("Vehicle by serialNumber not found."));
+        .orElseThrow(
+            () ->
+                new NotFoundException(
+                    String.format("Vehicle by serialNumber '%s' not found.", serialNumber)));
   }
 
   public PaginatedResponse<VehicleDto> getVehicles(VehicleQueryParamDto params) {
     PaginatedResult<Vehicle> paginatedResult = vehicleRepository.findAll(params);
     return vehicleMapper.toPaginatedResponse(params, paginatedResult);
+  }
+
+  @Transactional
+  public void deleteVehicleById(UUID id) {
+    vehicleRepository.deleteById(id);
   }
 }

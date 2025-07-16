@@ -34,13 +34,13 @@ public class PaginationQueryParam {
     this.size = DEFAULT_SIZE;
   }
 
-  public PaginationQueryParam(int size, int page) {
-    this.size = Math.min(Math.max(size, MIN_SIZE), MAX_SIZE);
-    this.page = Math.max(page, MIN_PAGE);
-  }
-
   @JsonIgnore
   public int getPageIndex() {
     return this.getPage() - 1;
+  }
+
+  @JsonIgnore
+  public int getOffset() {
+    return this.getPageIndex() * this.getSize();
   }
 }

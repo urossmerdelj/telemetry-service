@@ -12,7 +12,7 @@
         <maven.compiler.release>21</maven.compiler.release>
 
         <quarkus.version>3.24.3</quarkus.version>
-        <hibernate-spatial.version>7.0.5.Final</hibernate-spatial.version>
+        <hibernate.version>7.0.5.Final</hibernate.version>
         <lombok.version>1.18.38</lombok.version>
         <mapstruct.version>1.6.3</mapstruct.version>
         <compiler-plugin.version>3.14.0</compiler-plugin.version>
@@ -48,7 +48,7 @@
         <dependency>
             <groupId>org.hibernate.orm</groupId>
             <artifactId>hibernate-spatial</artifactId>
-            <version>${hibernate-spatial.version}</version>
+            <version>${hibernate.version}</version>
         </dependency>
         <dependency>
             <groupId>io.quarkus</groupId>
@@ -81,6 +81,7 @@
             <groupId>com.fasterxml.jackson.dataformat</groupId>
             <artifactId>jackson-dataformat-csv</artifactId>
         </dependency>
+        <!--TODO: fix vulnerability either by downgrading or upgrading when it is fixed-->
         <dependency>
             <groupId>io.quarkus</groupId>
             <artifactId>quarkus-junit5</artifactId>
@@ -137,6 +138,11 @@
                 <configuration>
                     <parameters>true</parameters>
                     <annotationProcessorPaths>
+                        <path>
+                            <groupId>org.hibernate.orm</groupId>
+                            <artifactId>hibernate-jpamodelgen</artifactId>
+                            <version>${hibernate.version}</version>
+                        </path>
                         <path>
                             <groupId>org.mapstruct</groupId>
                             <artifactId>mapstruct-processor</artifactId>

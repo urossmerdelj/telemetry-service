@@ -63,7 +63,7 @@ public class CombineTelemetryCsvParser extends TelemetryCsvParserBase {
     telemetry.setAutoPilotStatus(
         parseEnumFromString(row.get("Auto Pilot status []"), EnabledStatus::fromString));
     telemetry.setCruisePilotStatus(
-        parseEnumFromString(row.get("Cruise Pilot status []"), EnabledStatus::fromString));
+        parseEnumFromInteger(row.get("Cruise Pilot status []"), EnabledStatus::fromCode));
     telemetry.setRateOfWork(parseDouble(row.get("Rate of work [ha/h]")));
     telemetry.setYieldValue(parseDouble(row.get("Yield [t/ha]")));
     telemetry.setQuantimeterCalibrationFactor(

@@ -21,6 +21,6 @@ public interface BaseMapper<E, D> {
       PaginationQueryParam params, PaginatedResult<E> paginatedResult) {
     PaginatedResult<D> result =
         new PaginatedResult<>(toDto(paginatedResult.data()), paginatedResult.total());
-    return new PaginatedResponse<>(params, result);
+    return new PaginatedResponse<>(result, params);
   }
 }

@@ -1,5 +1,6 @@
 package com.logineko.resources.exceptions.mappers;
 
+import com.logineko.dto.ErrorResponse;
 import jakarta.ws.rs.core.Response;
 import jakarta.ws.rs.ext.ExceptionMapper;
 import jakarta.ws.rs.ext.Provider;
@@ -23,7 +24,9 @@ public class PSQLExceptionMapper implements ExceptionMapper<ConstraintViolationE
       }
     }
 
-    return Response.status(status).build();
+    return Response.status(status)
+        .entity(new ErrorResponse(status.getStatusCode(), status.getReasonPhrase()))
+        .build();
   }
 
   private boolean isConflict(String sqlState) {
