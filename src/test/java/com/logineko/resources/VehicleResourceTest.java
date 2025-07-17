@@ -24,6 +24,8 @@ class VehicleResourceTest {
 
   @Inject VehicleTelemetryRepository telemetryRepository;
 
+  private static final String TRACTOR_SERIAL = "A5304997";
+
   @BeforeEach
   @Transactional
   void setUp() {
@@ -45,7 +47,7 @@ class VehicleResourceTest {
 
   @Test
   void testCreateVehicle_success() {
-    CreateVehicleRequestDto request = new CreateVehicleRequestDto("123", VehicleType.TRACTOR);
+    CreateVehicleRequestDto request = new CreateVehicleRequestDto(TRACTOR_SERIAL);
 
     given()
         .contentType(ContentType.JSON)
@@ -55,18 +57,18 @@ class VehicleResourceTest {
         .then()
         .statusCode(200)
         .body("id", notNullValue())
-        .body("serialNumber", equalTo("123"))
+        .body("serialNumber", equalTo(TRACTOR_SERIAL))
         .body("vehicleType", equalTo("TRACTOR"));
   }
 
   @Test
   void testCreateVehicle_conflict() {
     Vehicle vehicle = new Vehicle();
-    vehicle.setSerialNumber("CONFLICT");
+    vehicle.setSerialNumber(TRACTOR_SERIAL);
     vehicle.setVehicleType(VehicleType.COMBINE);
     setUpVehicle(vehicle);
 
-    CreateVehicleRequestDto request = new CreateVehicleRequestDto("CONFLICT", VehicleType.TRACTOR);
+    CreateVehicleRequestDto request = new CreateVehicleRequestDto(TRACTOR_SERIAL);
 
     given()
         .contentType(ContentType.JSON)
@@ -79,7 +81,7 @@ class VehicleResourceTest {
 
   @Test
   void testCreateVehicle_badRequest() {
-    CreateVehicleRequestDto request = new CreateVehicleRequestDto(null, VehicleType.TRACTOR);
+    CreateVehicleRequestDto request = new CreateVehicleRequestDto("B5304997");
 
     given()
         .contentType(ContentType.JSON)

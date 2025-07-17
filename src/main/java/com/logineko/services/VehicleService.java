@@ -5,6 +5,7 @@ import com.logineko.dto.vehicle.CreateVehicleRequestDto;
 import com.logineko.dto.vehicle.VehicleDto;
 import com.logineko.dto.vehicle.VehicleQueryParamDto;
 import com.logineko.entities.Vehicle;
+import com.logineko.entities.enums.VehicleType;
 import com.logineko.mappers.VehicleMapper;
 import com.logineko.repositories.VehicleRepository;
 import com.logineko.repositories.dto.PaginatedResult;
@@ -31,8 +32,12 @@ public class VehicleService {
               throw new ConflictException("Vehicle with serial number already exists.");
             });
 
+    VehicleType vehicleType = VehicleType.fromSerialNumber(body.serialNumber());
+
     Vehicle vehicle = vehicleMapper.toEntity(body);
+    vehicle.setVehicleType(vehicleType);
     vehicleRepository.persist(vehicle);
+
     return vehicleMapper.toDto(vehicle);
   }
 

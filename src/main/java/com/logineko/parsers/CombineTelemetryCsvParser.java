@@ -1,6 +1,9 @@
 package com.logineko.parsers;
 
 import com.logineko.annotations.VehicleTypeParser;
+import com.logineko.dto.telemetry.csv.CombineCsvColumn;
+import com.logineko.dto.telemetry.csv.CsvColumn;
+import com.logineko.dto.telemetry.csv.CsvColumnBase;
 import com.logineko.entities.CombineTelemetry;
 import com.logineko.entities.Vehicle;
 import com.logineko.entities.VehicleTelemetry;
@@ -8,7 +11,9 @@ import com.logineko.entities.enums.CropType;
 import com.logineko.entities.enums.EnabledStatus;
 import com.logineko.entities.enums.VehicleType;
 import jakarta.enterprise.context.ApplicationScoped;
+import java.util.Arrays;
 import java.util.Map;
+import java.util.stream.Stream;
 
 @ApplicationScoped
 @VehicleTypeParser(VehicleType.COMBINE)
@@ -19,58 +24,104 @@ public class CombineTelemetryCsvParser extends TelemetryCsvParserBase {
     CombineTelemetry telemetry = new CombineTelemetry();
 
     parseCommonFields(telemetry, row, vehicle);
-    telemetry.setGroundSpeed(parseDouble(row.get("Ground speed [km/h]")));
+    telemetry.setGroundSpeed(parseDouble(row.get(CombineCsvColumn.GROUND_SPEED.getColumnName())));
 
     // Combine-specific fields
-    telemetry.setDrumSpeed(parseInteger(row.get("Drum speed [rpm]")));
-    telemetry.setFanSpeed(parseInteger(row.get("Fan speed [rpm]")));
-    telemetry.setRotorStrawWalkerSpeed(parseInteger(row.get("Rotor / straw walker speed [rpm]")));
-    telemetry.setSeparationLosses(parseDouble(row.get("Separation losses [%]")));
-    telemetry.setSieveLosses(parseDouble(row.get("Sieve losses [%]")));
+    telemetry.setDrumSpeed(parseInteger(row.get(CombineCsvColumn.DRUM_SPEED.getColumnName())));
+    telemetry.setFanSpeed(parseInteger(row.get(CombineCsvColumn.FAN_SPEED.getColumnName())));
+    telemetry.setRotorStrawWalkerSpeed(
+        parseInteger(row.get(CombineCsvColumn.ROTOR_STRAW_WALKER_SPEED.getColumnName())));
+    telemetry.setSeparationLosses(
+        parseDouble(row.get(CombineCsvColumn.SEPARATION_LOSSES.getColumnName())));
+    telemetry.setSieveLosses(parseDouble(row.get(CombineCsvColumn.SIEVE_LOSSES.getColumnName())));
     telemetry.setChopperStatus(
-        parseEnumFromString(row.get("Chopper []"), EnabledStatus::fromString));
-    telemetry.setDieselTankLevel(parseDouble(row.get("Diesel tank level [%]")));
-    telemetry.setNumberOfPartialWidths(parseInteger(row.get("No. of partial widths []")));
+        parseEnumFromString(
+            row.get(CombineCsvColumn.CHOPPER_STATUS.getColumnName()), EnabledStatus::fromString));
+    telemetry.setDieselTankLevel(
+        parseDouble(row.get(CombineCsvColumn.DIESEL_TANK_LEVEL.getColumnName())));
+    telemetry.setNumberOfPartialWidths(
+        parseInteger(row.get(CombineCsvColumn.NUMBER_OF_PARTIAL_WIDTHS.getColumnName())));
     telemetry.setFrontAttachmentStatus(
-        parseEnumFromString(row.get("Front attachment On/Off []"), EnabledStatus::fromString));
-    telemetry.setMaxNumberOfPartialWidths(parseInteger(row.get("max. no. of partial widths []")));
-    telemetry.setFeedRakeSpeed(parseInteger(row.get("Feed rake speed [rpm]")));
+        parseEnumFromString(
+            row.get(CombineCsvColumn.FRONT_ATTACHMENT_STATUS.getColumnName()),
+            EnabledStatus::fromString));
+    telemetry.setMaxNumberOfPartialWidths(
+        parseInteger(row.get(CombineCsvColumn.MAX_NUMBER_OF_PARTIAL_WIDTHS.getColumnName())));
+    telemetry.setFeedRakeSpeed(
+        parseInteger(row.get(CombineCsvColumn.FEED_RAKE_SPEED.getColumnName())));
     telemetry.setWorkingPosition(
-        parseEnumFromString(row.get("Working position [I/O]"), EnabledStatus::fromString));
+        parseEnumFromString(
+            row.get(CombineCsvColumn.WORKING_POSITION.getColumnName()), EnabledStatus::fromString));
     telemetry.setGrainTankUnloading(
-        parseEnumFromString(row.get("Grain tank unloading [I/O]"), EnabledStatus::fromString));
+        parseEnumFromString(
+            row.get(CombineCsvColumn.GRAIN_TANK_UNLOADING.getColumnName()),
+            EnabledStatus::fromString));
     telemetry.setMainDriveStatus(
-        parseEnumFromString(row.get("Main drive status [I/O]"), EnabledStatus::fromString));
-    telemetry.setConcavePosition(parseInteger(row.get("Concave position [mm]")));
-    telemetry.setUpperSievePosition(parseInteger(row.get("Upper sieve position [mm]")));
-    telemetry.setLowerSievePosition(parseInteger(row.get("Lower sieve position [mm]")));
+        parseEnumFromString(
+            row.get(CombineCsvColumn.MAIN_DRIVE_STATUS.getColumnName()),
+            EnabledStatus::fromString));
+    telemetry.setConcavePosition(
+        parseInteger(row.get(CombineCsvColumn.CONCAVE_POSITION.getColumnName())));
+    telemetry.setUpperSievePosition(
+        parseInteger(row.get(CombineCsvColumn.UPPER_SIEVE_POSITION.getColumnName())));
+    telemetry.setLowerSievePosition(
+        parseInteger(row.get(CombineCsvColumn.LOWER_SIEVE_POSITION.getColumnName())));
     telemetry.setGrainTankFillLevel70Reached(
-        parseEnumFromString(row.get("Grain tank 70 [I/O]"), EnabledStatus::fromString));
+        parseEnumFromString(
+            row.get(CombineCsvColumn.GRAIN_TANK_FILL_LEVEL_70_REACHED.getColumnName()),
+            EnabledStatus::fromString));
     telemetry.setGrainTankFillLevel100Reached(
-        parseEnumFromString(row.get("Grain tank 100 [I/O]"), EnabledStatus::fromString));
-    telemetry.setGrainMoistureContent(parseDouble(row.get("Grain moisture content [%]")));
-    telemetry.setThroughput(parseDouble(row.get("Throughput [t/h]")));
-    telemetry.setRadialSpreaderSpeed(parseInteger(row.get("Radial spreader speed [rpm]")));
-    telemetry.setGrainInReturns(parseDouble(row.get("Grain in returns [%]")));
-    telemetry.setChannelPosition(parseDouble(row.get("Channel position [%]")));
+        parseEnumFromString(
+            row.get(CombineCsvColumn.GRAIN_TANK_FILL_LEVEL_100_REACHED.getColumnName()),
+            EnabledStatus::fromString));
+    telemetry.setGrainMoistureContent(
+        parseDouble(row.get(CombineCsvColumn.GRAIN_MOISTURE_CONTENT.getColumnName())));
+    telemetry.setThroughput(parseDouble(row.get(CombineCsvColumn.THROUGHPUT.getColumnName())));
+    telemetry.setRadialSpreaderSpeed(
+        parseInteger(row.get(CombineCsvColumn.RADIAL_SPREADER_SPEED.getColumnName())));
+    telemetry.setGrainInReturns(
+        parseDouble(row.get(CombineCsvColumn.GRAIN_IN_RETURNS.getColumnName())));
+    telemetry.setChannelPosition(
+        parseDouble(row.get(CombineCsvColumn.CHANNEL_POSITION.getColumnName())));
     telemetry.setYieldMeasurementStatus(
-        parseEnumFromString(row.get("Yield measurement [I/O]"), EnabledStatus::fromString));
-    telemetry.setReturnsAugerMeasurement(parseDouble(row.get("Returns auger measurement [%]")));
+        parseEnumFromString(
+            row.get(CombineCsvColumn.YIELD_MEASUREMENT_STATUS.getColumnName()),
+            EnabledStatus::fromString));
+    telemetry.setReturnsAugerMeasurement(
+        parseDouble(row.get(CombineCsvColumn.RETURNS_AUGER_MEASUREMENT.getColumnName())));
     telemetry.setMoistureMeasurementStatus(
-        parseEnumFromString(row.get("Moisture measurement []"), EnabledStatus::fromString));
-    telemetry.setTypeOfCrop(parseEnumFromString(row.get("Type of crop []"), CropType::fromString));
-    telemetry.setSpecificCropWeight(parseInteger(row.get("Specific crop weight [g/l]")));
+        parseEnumFromString(
+            row.get(CombineCsvColumn.MOISTURE_MEASUREMENT_STATUS.getColumnName()),
+            EnabledStatus::fromString));
+    telemetry.setTypeOfCrop(
+        parseEnumFromString(
+            row.get(CombineCsvColumn.TYPE_OF_CROP.getColumnName()), CropType::fromString));
+    telemetry.setSpecificCropWeight(
+        parseInteger(row.get(CombineCsvColumn.SPECIFIC_CROP_WEIGHT.getColumnName())));
     telemetry.setAutoPilotStatus(
-        parseEnumFromString(row.get("Auto Pilot status []"), EnabledStatus::fromString));
+        parseEnumFromString(
+            row.get(CombineCsvColumn.AUTO_PILOT_STATUS.getColumnName()),
+            EnabledStatus::fromString));
     telemetry.setCruisePilotStatus(
-        parseEnumFromInteger(row.get("Cruise Pilot status []"), EnabledStatus::fromCode));
-    telemetry.setRateOfWork(parseDouble(row.get("Rate of work [ha/h]")));
-    telemetry.setYieldValue(parseDouble(row.get("Yield [t/ha]")));
+        parseEnumFromInteger(
+            row.get(CombineCsvColumn.CRUISE_PILOT_STATUS.getColumnName()),
+            EnabledStatus::fromCode));
+    telemetry.setRateOfWork(parseDouble(row.get(CombineCsvColumn.RATE_OF_WORK.getColumnName())));
+    telemetry.setYieldValue(parseDouble(row.get(CombineCsvColumn.YIELD_VALUE.getColumnName())));
     telemetry.setQuantimeterCalibrationFactor(
-        parseDouble(row.get("Quantimeter calibration factor []")));
-    telemetry.setSeparationSensitivity(parseInteger(row.get("Separation sensitivity [%]")));
-    telemetry.setSieveSensitivity(parseInteger(row.get("Sieve sensitivity [%]")));
+        parseDouble(row.get(CombineCsvColumn.QUANTIMETER_CALIBRATION_FACTOR.getColumnName())));
+    telemetry.setSeparationSensitivity(
+        parseInteger(row.get(CombineCsvColumn.SEPARATION_SENSITIVITY.getColumnName())));
+    telemetry.setSieveSensitivity(
+        parseInteger(row.get(CombineCsvColumn.SIEVE_SENSITIVITY.getColumnName())));
 
     return telemetry;
+  }
+
+  @Override
+  public CsvColumn[] getRequiredColumns() {
+    return Stream.concat(
+            Arrays.stream(CsvColumnBase.values()), Arrays.stream(CombineCsvColumn.values()))
+        .toArray(CsvColumn[]::new);
   }
 }
