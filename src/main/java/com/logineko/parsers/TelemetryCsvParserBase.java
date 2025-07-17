@@ -2,6 +2,8 @@ package com.logineko.parsers;
 
 import static com.logineko.utils.DateTimeUtils.EXTERNAL_SOURCE_DATE_FORMATTER;
 
+import com.logineko.dto.telemetry.csv.CsvColumn;
+import com.logineko.dto.telemetry.csv.CsvColumnBase;
 import com.logineko.entities.Vehicle;
 import com.logineko.entities.VehicleTelemetry;
 import com.logineko.resources.exceptions.TelemetryCsvParsingException;
@@ -19,16 +21,23 @@ public abstract class TelemetryCsvParserBase implements TelemetryCsvParser {
   @Override
   public abstract VehicleTelemetry parseRow(Map<String, String> row, Vehicle vehicle);
 
+  @Override
+  public abstract CsvColumn[] getRequiredColumns();
+
   protected void parseCommonFields(
       VehicleTelemetry telemetry, Map<String, String> row, Vehicle vehicle) {
     telemetry.setVehicle(vehicle);
-    telemetry.setDateTime(parseDateTime(row.get("Date/Time")));
-    telemetry.setLongitude(parseDouble(row.get("GPS longitude [°]")));
-    telemetry.setLatitude(parseDouble(row.get("GPS latitude [°]")));
-    telemetry.setLocation(parseLocation(row.get("GPS longitude [°]"), row.get("GPS latitude [°]")));
-    telemetry.setTotalWorkingHours(parseDouble(row.get("Total working hours counter [h]")));
-    telemetry.setEngineSpeed(parseInteger(row.get("Engine speed [rpm]")));
-    telemetry.setEngineLoad(parseInteger(row.get("Engine load [%]")));
+    telemetry.setDateTime(parseDateTime(row.get(CsvColumnBase.DATE_TIME.getColumnName())));
+    telemetry.setLongitude(parseDouble(row.get(CsvColumnBase.GPS_LONGITUDE.getColumnName())));
+    telemetry.setLatitude(parseDouble(row.get(CsvColumnBase.GPS_LATITUDE.getColumnName())));
+    telemetry.setLocation(
+        parseLocation(
+            row.get(CsvColumnBase.GPS_LONGITUDE.getColumnName()),
+            row.get(CsvColumnBase.GPS_LATITUDE.getColumnName())));
+    telemetry.setTotalWorkingHours(
+        parseDouble(row.get(CsvColumnBase.TOTAL_WORKING_HOURS.getColumnName())));
+    telemetry.setEngineSpeed(parseInteger(row.get(CsvColumnBase.ENGINE_SPEED.getColumnName())));
+    telemetry.setEngineLoad(parseInteger(row.get(CsvColumnBase.ENGINE_LOAD.getColumnName())));
   }
 
   protected boolean isNotApplicable(String value) {

@@ -11,5 +11,6 @@ import org.mapstruct.MappingConstants;
 public interface VehicleMapper extends BaseMapper<Vehicle, VehicleDto> {
 
   @Mapping(target = "id", ignore = true)
+  @Mapping(target = "vehicleType", ignore = true)
   Vehicle toEntity(CreateVehicleRequestDto dto);
 }

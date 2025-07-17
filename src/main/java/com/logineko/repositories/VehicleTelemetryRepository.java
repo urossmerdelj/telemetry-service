@@ -130,13 +130,13 @@ public class VehicleTelemetryRepository implements PanacheRepositoryBase<Vehicle
       return value;
     } catch (IllegalArgumentException e) {
       throw new IllegalArgumentException(
-          "Invalid value for enum field '" + fieldName + "': " + value, e);
+          String.format("Invalid value for enum field '%s': %s", fieldName, value), e);
     } catch (DateTimeParseException e) {
       throw new IllegalArgumentException(
-          "Invalid date/time format for field '" + fieldName + "': " + value, e);
+          String.format("Invalid date/time format for field '%s': %s", fieldName, value), e);
     } catch (Exception e) {
       throw new IllegalArgumentException(
-          "Invalid value for field '" + fieldName + "': " + value, e);
+          String.format("Invalid value for field '%s': %s", fieldName, value), e);
     }
   }
 }

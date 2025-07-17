@@ -1,6 +1,7 @@
 package com.logineko.resources;
 
 import static io.restassured.RestAssured.given;
+import static org.hamcrest.Matchers.containsString;
 import static org.hamcrest.Matchers.equalTo;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
@@ -31,6 +32,7 @@ class TelemetryImportResourceTest {
   private static final String TRACTOR_SERIAL = "A5304997";
   private static final String TRACTOR_CSV_FILENAME = "LD_A5304997_20230331_20230401.csv";
   private static final String CSV_FILENAME_INVALID_SERIAL = "LD_A5304997_invalid_serial.csv";
+  private static final String CSV_FILENAME_MALFORMED = "LD_A5304997_malformed.csv";
 
   private File getTestFile(String filename) throws URISyntaxException {
     URL resource = getClass().getClassLoader().getResource(filename);
@@ -115,6 +117,18 @@ class TelemetryImportResourceTest {
         .post("/telemetry/import")
         .then()
         .statusCode(400);
+  }
+
+  @Test
+  @SneakyThrows
+  void testImportTelemetryCsv_malformedHeader() {
+    given()
+        .multiPart("file", getTestFile(CSV_FILENAME_MALFORMED), "text/csv")
+        .when()
+        .post("/telemetry/import")
+        .then()
+        .statusCode(400)
+        .body(containsString("CSV file is missing required columns:"));
   }
 
   @Test
